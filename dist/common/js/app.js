@@ -1,0 +1,1 @@
+document.getElementById("id"),document.getElementsByClassName("class"),document.getElementsByTagName("div"),document.querySelector("#main .posts h1"),document.querySelectorAll("a");

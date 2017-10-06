@@ -1,0 +1,45 @@
+:root {
+  --max-width: 960px;
+  --color: #000;
+}
+
+@custom-selector :--onEvent :hover, :active, :focus;
+
+@custom-media --md-up screen and (min-width: 768px);
+
+:root {
+  --clearfix: {
+    &::after {
+      content: "";
+      display: block;
+      clear: both;
+    }
+  }
+}
+
+html {
+  font-size: 14px;
+}
+.ha{
+  display: flex;
+}
+.foo {
+  max-width: var(--max-width);
+  color: var(--color);
+  font-size: 1rem;
+}
+@media (--md-up) {
+  .foo {
+    @apply --clearfix;
+  }
+}
+
+.bar:--onEvent {
+  text-decoration: none;
+}
+
+@media (--md-up) {
+  .baz {
+    @apply --clearfix;
+  }
+}
