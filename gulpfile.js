@@ -15,6 +15,10 @@ var webserver = require('gulp-webserver');
 var connectSSI = require('connect-ssi');
 var uglify = require('gulp-uglify');
 
+var rename = require('gulp-rename');
+var ejs = require('gulp-ejs');
+var fs = require('fs');
+
 var paths = {
   'src': 'src/',
   'dist': 'dist/'
@@ -37,6 +41,34 @@ gulp.task('css', function() {
     }))
     .pipe(postcss(processors))
     .pipe(gulp.dest(paths.dist + 'common/css'))
+});
+
+// gulp.task('ejs', function() {
+//
+//   var tmp_file = 'src/ejs/template.ejs'; // テンプレートファイル
+//   var json_file = 'src/ejs/data/pages.json'; // ページデータ（JSONファイル）
+//
+//   var json = JSON.parse(fs.readFileSync(json_file)); //ページデータ（JSONファイル）の読み込み
+//   var page_data = json.pages;
+//
+//   for (var i = 0; i < page_data.length; i++) // ページ数分loop
+//     var id = page_data[i].id;
+//
+//     gulp.src(tmp_file)
+//     .pipe(ejs({
+//         pageData: page_data[i]  // ejsにページデータを渡す
+//     }));
+//     .pipe(rename(id + '.html')); // ファイル名を(id).htmlに
+//     .pipe(gulp.dest("dist/")); // 生成したHTMLファイルの保存先
+//   }
+// });
+
+gulp.task('ejs', () => {
+    // var json = JSON.parse(fs.readFileSync("src/ejs/data/data.json"));
+    gulp.src( ['src/ejs//**/*.ejs', '!' + 'src/ejs/**/_*.ejs'])
+        .pipe(ejs('', {"ext": ".html"}))
+        .pipe(rename({extname: '.html'}))
+        .pipe(gulp.dest('dist'));
 });
 
 // ローカルサーバー立ち上げ
@@ -69,6 +101,8 @@ gulp.task('compress', function() {
 gulp.task('default', function() {
   gulp.watch("src/pcss/*css", ["css"]);
   gulp.watch("src/js/*js", ["compress"]);
+  gulp.watch('src/ejs/**/*.ejs', ['ejs']);
+  gulp.watch("src/js/*js", ["compress"])
   // gulp.watch("src/scss/foundation/*",["css"]);
   // gulp.watch("src/scss/layout/*",["css"]);
   // gulp.watch("src/scss/object/*",["css"]);
